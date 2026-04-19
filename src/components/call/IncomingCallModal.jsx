@@ -19,7 +19,7 @@ const IncomingCallModal = ({ caller, onAccept, onDecline }) => {
           <Button
             label="Accept"
             onPress={onAccept}
-            variant="primary"
+            variant="secondary"
           />
         </div>
 
