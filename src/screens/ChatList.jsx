@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
+import { API_BASE_URL } from '../config/api';
 import { setConversations } from '../redux/slices/chatSlice';
 import ConversationRow from '../components/chat/ConversationRow';
 import EmptyState from '../components/common/EmptyState';
@@ -26,7 +27,7 @@ const ChatList = () => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://localhost:3000/api/v1/chat/conversations', {
+        const response = await fetch(`${API_BASE_URL}/api/v1/chat/conversations`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,

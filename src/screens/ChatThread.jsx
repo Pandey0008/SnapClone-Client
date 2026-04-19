@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
+import { API_BASE_URL } from '../config/api';
 import { appendMessage, setTyping, setMessagesByRoom } from '../redux/slices/chatSlice';
 import { useSocket, joinRoom, getSocket } from '../redux/socketHook';
 import MessageBubble from '../components/chat/MessageBubble';
@@ -44,7 +45,7 @@ const ChatThread = () => {
     const loadMessages = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/api/v1/chat/messages/${roomId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/chat/messages/${roomId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -93,7 +94,7 @@ const ChatThread = () => {
         });
       } else {
         // Fallback to API if socket not available
-        const response = await fetch('http://localhost:3000/api/v1/chat/messages', {
+        const response = await fetch('${API_BASE_URL}/api/v1/chat/messages', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${accessToken}`,

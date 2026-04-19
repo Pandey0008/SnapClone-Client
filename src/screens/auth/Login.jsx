@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/hooks';
+import { API_BASE_URL } from '../../config/api';
 import { setCredentials } from '../../redux/slices/authSlice';
 import Button from '../../components/common/Button';
 import ErrorBanner from '../../components/common/ErrorBanner';
@@ -20,7 +21,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/v1/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

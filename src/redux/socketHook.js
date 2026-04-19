@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { API_BASE_URL } from '../config/api';
 import { useAppDispatch } from './hooks';
 import { appendMessage, setTyping } from '../redux/slices/chatSlice';
 import { setOnlineUsers, addOnlineUser, removeOnlineUser } from '../redux/slices/onlineSlice';
@@ -15,7 +16,7 @@ export const useSocket = (user) => {
 
     // Connect to Socket.IO server if not already connected
     if (!socketInstance) {
-      socketInstance = io('http://localhost:3000', {
+      socketInstance = io(API_BASE_URL, {
         auth: {
           userId: user._id
         },

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector } from '../redux/hooks';
+import { API_BASE_URL } from '../config/api';
 import Avatar from '../components/common/Avatar';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
@@ -24,9 +25,9 @@ const Discover = () => {
         setLoading(true);
         setError(null);
 
-        let url = 'http://localhost:3000/api/v1/users/all';
+        let url = `${API_BASE_URL}/api/v1/users/all`;
         if (searchQuery.trim().length >= 2) {
-          url = `http://localhost:3000/api/v1/users/search?query=${encodeURIComponent(searchQuery)}`;
+          url = `${API_BASE_URL}/api/v1/users/search?query=${encodeURIComponent(searchQuery)}`;
         }
 
         const response = await fetch(url, {
@@ -65,7 +66,7 @@ const Discover = () => {
 
     const fetchRequests = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/users/requests', {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/requests`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -90,7 +91,7 @@ const Discover = () => {
 
   const handleAddFriend = async (recipientId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/users/request/send', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/request/send`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -116,7 +117,7 @@ const Discover = () => {
 
   const handleAcceptRequest = async (senderId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/users/request/accept', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/request/accept`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -138,7 +139,7 @@ const Discover = () => {
 
   const handleRejectRequest = async (senderId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/users/request/reject', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/request/reject`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
