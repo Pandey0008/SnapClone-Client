@@ -132,7 +132,7 @@ const Login = () => {
                   dispatch(
                     setCredentials({
                       user: data.user,
-                      accessToken: data.token,
+                      accessToken: data.accessToken,
                       refreshToken: null,
                     }),
                   );
