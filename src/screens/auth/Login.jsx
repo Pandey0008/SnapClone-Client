@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../../config/api';
 import { setCredentials } from '../../redux/slices/authSlice';
 import Button from '../../components/common/Button';
 import ErrorBanner from '../../components/common/ErrorBanner';
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -87,7 +88,7 @@ const Login = () => {
 
             <Button
               label={loading ? "Logging in..." : "Log In"}
-              onPress={() => {}}
+              onPress={() => { }}
               variant="primary"
               loading={loading}
             />
@@ -100,17 +101,53 @@ const Login = () => {
           </div>
 
           {/* Google Button */}
-          <button
-            onClick={() => alert("Google Login - Coming Soon")}
-            className="w-full bg-white text-black py-4 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:bg-gray-100 transition"
-          >
-            <img 
-              src="https://www.google.com/favicon.ico" 
-              alt="Google" 
-              className="w-5 h-5" 
-            />
-            Continue with Google
-          </button>
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              console.log(`${API_BASE_URL}/api/v1/auth/google`);
+              try {
+
+                const response = await fetch(
+                  `${API_BASE_URL}/api/v1/auth/google`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                      credential: credentialResponse.credential
+                    })
+                  }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+
+                  dispatch(setCredentials({
+                    user: data.user,
+                    accessToken: data.accessToken,
+                    refreshToken: null
+                  }));
+
+                  navigate("/camera");
+
+                } else {
+
+                  setError(data.error || "Google login failed");
+
+                }
+
+              } catch (err) {
+
+                setError("Google login failed");
+
+              }
+            }}
+
+            onError={() => {
+              setError("Google Sign-in failed");
+            }}
+          />
 
           <p className="text-center mt-8 text-snap-white50">
             Don't have an account?{' '}
