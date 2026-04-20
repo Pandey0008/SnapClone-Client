@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Volume2 } from 'lucide-react';
 
 const VideoCallView = memo(({
@@ -12,23 +12,39 @@ const VideoCallView = memo(({
   onEnd,
   onSpeaker
 }) => {
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+
+  // Set srcObject on video elements
+  useEffect(() => {
+    if (localVideoRef.current && localStream) {
+      localVideoRef.current.srcObject = localStream;
+    }
+  }, [localStream]);
+
+  useEffect(() => {
+    if (remoteVideoRef.current && remoteStream) {
+      remoteVideoRef.current.srcObject = remoteStream;
+    }
+  }, [remoteStream]);
+
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden">
       {/* Remote Video (Main) */}
       <video
+        ref={remoteVideoRef}
         autoPlay
         playsInline
-        srcObject={remoteStream}
         className="absolute inset-0 w-full h-full object-cover"
       />
 
       {/* Self PiP */}
       <div className="absolute top-6 right-6 w-28 h-40 bg-black rounded-3xl overflow-hidden border-4 border-snap-yellow shadow-2xl">
         <video
+          ref={localVideoRef}
           autoPlay
           playsInline
           muted
-          srcObject={localStream}
           className="w-full h-full object-cover"
         />
         {isCameraOff && (

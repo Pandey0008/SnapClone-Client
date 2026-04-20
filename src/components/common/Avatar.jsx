@@ -1,14 +1,17 @@
 import { memo } from 'react';
 
 const Avatar = memo(({ uri, name, size = 40 }) => {
-  const initials = name
+  // FIX: Guard against undefined/null name to prevent crash
+  const safeName = name || '?';
+
+  const initials = safeName
     .split(' ')
     .map(n => n[0])
     .join('')
     .toUpperCase()
     .slice(0, 2);
 
-  const bgColor = `hsl(${name.length * 30 % 360}, 70%, 50%)`;
+  const bgColor = `hsl(${safeName.length * 30 % 360}, 70%, 50%)`;
 
   return (
     <div
@@ -18,7 +21,7 @@ const Avatar = memo(({ uri, name, size = 40 }) => {
       {uri ? (
         <img
           src={uri}
-          alt={name}
+          alt={safeName}
           className="w-full h-full object-cover"
         />
       ) : (

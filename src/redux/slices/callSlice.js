@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const callSlice = createSlice({
   name: 'call',
   initialState: {
+    incomingCall: null, // { from, callType: 'video' | 'voice' }
     isInCall: false,
     isMuted: false,
     isCameraOff: false,
@@ -14,6 +15,12 @@ const callSlice = createSlice({
     connectionType: null, // 'p2p' | 'turn'
   },
   reducers: {
+    setIncomingCall: (state, action) => {
+      state.incomingCall = action.payload;
+    },
+    clearIncomingCall: (state) => {
+      state.incomingCall = null;
+    },
     startCall: (state, action) => {
       state.isInCall = true;
       state.peer = action.payload.peer;
@@ -45,6 +52,8 @@ const callSlice = createSlice({
 });
 
 export const { 
+  setIncomingCall,
+  clearIncomingCall,
   startCall, 
   endCall, 
   setMuted, 

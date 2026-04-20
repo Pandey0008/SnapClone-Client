@@ -21,6 +21,7 @@ import ActiveCall from './screens/ActiveCall';
 
 // Components
 import BottomTabBar from './components/common/BottomTabBar';
+import IncomingCallHandler from './components/call/IncomingCallHandler';
 
 function AppContent() {
   const { isAuthenticated, hydrated } = useAppSelector((state) => state.auth);
@@ -44,6 +45,9 @@ function AppContent() {
 
   return (
     <div className="relative min-h-screen bg-snap-dark text-white">
+      {/* Global incoming call handler - shows modal across entire app */}
+      <IncomingCallHandler />
+      
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/camera" replace />} />

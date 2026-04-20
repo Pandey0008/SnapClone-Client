@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config/api';
 import { useAppDispatch } from './hooks';
 import { appendMessage, setTyping } from '../redux/slices/chatSlice';
 import { setOnlineUsers, addOnlineUser, removeOnlineUser } from '../redux/slices/onlineSlice';
+import { setIncomingCall } from '../redux/slices/callSlice';
 
 let socketInstance = null;
 
@@ -56,6 +57,28 @@ export const useSocket = (user) => {
       socketInstance.on('typing-indicator', ({ userId, isTyping }) => {
         // Handle typing indicator if needed
         console.log('User typing:', userId, isTyping);
+      });
+
+      // Listen for incoming video call
+      socketInstance.on('video-call-incoming', ({ from, fromName, fromAvatar }) => {
+        console.log('Incoming video call from:', from);
+        dispatch(setIncomingCall({
+          from,
+          fromName,
+          fromAvatar,
+          callType: 'video'
+        }));
+      });
+
+      // Listen for incoming voice call
+      socketInstance.on('voice-call-incoming', ({ from, fromName, fromAvatar }) => {
+        console.log('Incoming voice call from:', from);
+        dispatch(setIncomingCall({
+          from,
+          fromName,
+          fromAvatar,
+          callType: 'voice'
+        }));
       });
 
       socketInstance.on('disconnect', () => {
