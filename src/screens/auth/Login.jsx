@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../redux/hooks';
-import { API_BASE_URL } from '../../config/api';
-import { setCredentials } from '../../redux/slices/authSlice';
-import Button from '../../components/common/Button';
-import ErrorBanner from '../../components/common/ErrorBanner';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { API_BASE_URL } from "../../config/api";
+import { setCredentials } from "../../redux/slices/authSlice";
+import Button from "../../components/common/Button";
+import ErrorBanner from "../../components/common/ErrorBanner";
 import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -19,12 +19,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
           password,
@@ -35,17 +35,19 @@ const Login = () => {
 
       if (response.ok) {
         // Store credentials in Redux
-        dispatch(setCredentials({
-          user: data.user,
-          accessToken: data.accessToken,
-          refreshToken: null
-        }));
-        navigate('/camera');
+        dispatch(
+          setCredentials({
+            user: data.user,
+            accessToken: data.accessToken,
+            refreshToken: null,
+          }),
+        );
+        navigate("/camera");
       } else {
-        setError(data.error || 'Login failed');
+        setError(data.error || "Login failed");
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,9 @@ const Login = () => {
           <div className="w-24 h-24 bg-snap-yellow rounded-3xl flex items-center justify-center text-6xl mb-4 shadow-xl">
             👻
           </div>
-          <h1 className="text-5xl font-black tracking-tighter text-white">SnapClone</h1>
+          <h1 className="text-5xl font-black tracking-tighter text-white">
+            SnapClone
+          </h1>
         </div>
 
         <div className="bg-snap-darkMid/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/10">
@@ -88,7 +92,7 @@ const Login = () => {
 
             <Button
               label={loading ? "Logging in..." : "Log In"}
-              onPress={() => { }}
+              onPress={() => {}}
               variant="primary"
               loading={loading}
             />
@@ -96,7 +100,9 @@ const Login = () => {
 
           <div className="my-8 flex items-center gap-4">
             <div className="h-px bg-white/10 flex-1" />
-            <span className="text-snap-white50 text-sm uppercase tracking-widest">OR</span>
+            <span className="text-snap-white50 text-sm uppercase tracking-widest">
+              OR
+            </span>
             <div className="h-px bg-white/10 flex-1" />
           </div>
 
@@ -104,55 +110,50 @@ const Login = () => {
           <GoogleLogin
             onSuccess={async (credentialResponse) => {
               console.log(`${API_BASE_URL}/api/v1/auth/google`);
+              console.log("GOOGLE TOKEN:", credentialResponse.credential);
               try {
-
                 const response = await fetch(
                   `${API_BASE_URL}/api/v1/auth/google`,
                   {
                     method: "POST",
                     headers: {
-                      "Content-Type": "application/json"
+                      "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      credential: credentialResponse.credential
-                    })
-                  }
+                      credential: credentialResponse.credential,
+                    }),
+                  },
                 );
 
                 const data = await response.json();
+                console.log("user", data);
 
                 if (response.ok) {
-
-                  dispatch(setCredentials({
-                    user: data.user,
-                    accessToken: data.accessToken,
-                    refreshToken: null
-                  }));
+                  dispatch(
+                    setCredentials({
+                      user: data.user,
+                      accessToken: data.accessToken,
+                      refreshToken: null,
+                    }),
+                  );
 
                   navigate("/camera");
-
                 } else {
-
                   setError(data.error || "Google login failed");
-
                 }
-
               } catch (err) {
-
                 setError("Google login failed");
-
               }
             }}
-
             onError={() => {
               setError("Google Sign-in failed");
             }}
           />
 
           <p className="text-center mt-8 text-snap-white50">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <span
-              onClick={() => navigate('/register')}
+              onClick={() => navigate("/register")}
               className="text-snap-yellow font-semibold cursor-pointer hover:underline"
             >
               Sign up

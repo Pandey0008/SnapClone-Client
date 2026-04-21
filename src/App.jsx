@@ -18,6 +18,7 @@ import Profile from './screens/Profile';
 import SendSnap from './screens/SendSnap';
 import SnapViewer from './screens/SnapViewer';
 import ActiveCall from './screens/ActiveCall';
+import UploadStory from "./screens/UploadStory";
 
 // Components
 import BottomTabBar from './components/common/BottomTabBar';
@@ -33,8 +34,8 @@ function AppContent() {
   // Hide bottom bar on these screens
   const hideTabBarRoutes = ['/chat/', '/snap/', '/call/'];
 
-  const shouldShowTabBar = 
-    isAuthenticated && 
+  const shouldShowTabBar =
+    isAuthenticated &&
     mainTabRoutes.some(route => location.pathname === route) &&
     !hideTabBarRoutes.some(route => location.pathname.startsWith(route));
 
@@ -47,13 +48,13 @@ function AppContent() {
     <div className="relative min-h-screen bg-snap-dark text-white">
       {/* Global incoming call handler - shows modal across entire app */}
       <IncomingCallHandler />
-      
+
       <Routes>
         {/* Auth Routes */}
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/camera" replace />} />
         <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/camera" replace />} />
 
-        {/* Protected Routes */}
+        {/* verifyTokened Routes */}
         {isAuthenticated ? (
           <>
             <Route path="/camera" element={<Camera />} />
@@ -67,6 +68,8 @@ function AppContent() {
             <Route path="/snap/send" element={<SendSnap />} />
             <Route path="/snap/view/:snapId" element={<SnapViewer />} />
             <Route path="/call/active" element={<ActiveCall />} />
+
+            <Route path="/upload-story" element={<UploadStory />} />
 
             <Route path="/" element={<Navigate to="/camera" replace />} />
           </>

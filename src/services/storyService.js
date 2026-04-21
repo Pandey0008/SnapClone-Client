@@ -1,0 +1,45 @@
+import axios from "axios";
+
+const API = axios.create({
+  baseURL: "http://localhost:3000/api/v1/stories",
+});
+
+
+API.interceptors.request.use((req) => {
+
+  const authData = localStorage.getItem("authData");
+
+  if (authData) {
+
+    const parsed = JSON.parse(authData);
+
+    console.log("ACCESS TOKEN:", parsed.accessToken);
+
+    if (parsed.accessToken) {
+      req.headers.Authorization = `Bearer ${parsed.accessToken}`;
+    }
+
+  }
+
+  return req;
+
+});
+
+export const createStoryAPI = (formData) =>
+  API.post("/create", formData);
+
+
+export const getStoriesFeedAPI = () =>
+  API.get("/feed");
+
+
+export const getArchivedStoriesAPI = () =>
+  API.get("/archive");
+
+
+export const viewStoryAPI = (storyId) =>
+  API.post(`/view/${storyId}`);
+
+
+export const deleteStoryAPI = (storyId) =>
+  API.delete(`/delete/${storyId}`);
