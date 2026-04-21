@@ -25,7 +25,7 @@ const BottomTabBar = () => {
               <div
                 key={tab.name}
                 onClick={() => navigate(tab.path)}
-                className="relative -top-8 flex flex-col items-center cursor-pointer active:scale-95 transition"
+                className="relative flex flex-col items-center cursor-pointer active:scale-95 transition"
               >
                 <div className="w-16 h-16 bg-snap-yellow rounded-3xl flex items-center justify-center shadow-2xl shadow-snap-yellow/50">
                   <tab.icon size={32} className="text-white" />
