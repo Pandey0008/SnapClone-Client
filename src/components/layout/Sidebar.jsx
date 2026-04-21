@@ -19,7 +19,7 @@ const Sidebar = () => {
           className={({ isActive }) =>
             `px-4 py-2 rounded-xl transition-all ${
               isActive
-                ? "bg-yellow-400 text-black"
+                ? "bg-yellow-400 text-white"
                 : "hover:bg-white/5"
             }`
           }
@@ -33,7 +33,7 @@ const Sidebar = () => {
           className={({ isActive }) =>
             `px-4 py-2 rounded-xl transition-all ${
               isActive
-                ? "bg-yellow-400 text-black"
+                ? "bg-yellow-400 text-white"
                 : "hover:bg-white/5"
             }`
           }
@@ -47,7 +47,7 @@ const Sidebar = () => {
           className={({ isActive }) =>
             `px-4 py-2 rounded-xl transition-all ${
               isActive
-                ? "bg-yellow-400 text-black"
+                ? "bg-yellow-400 text-white"
                 : "hover:bg-white/5"
             }`
           }
@@ -61,7 +61,7 @@ const Sidebar = () => {
           className={({ isActive }) =>
             `px-4 py-2 rounded-xl transition-all ${
               isActive
-                ? "bg-yellow-400 text-black"
+                ? "bg-yellow-400 text-white"
                 : "hover:bg-white/5"
             }`
           }

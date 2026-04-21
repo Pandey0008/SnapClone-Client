@@ -28,7 +28,7 @@ const BottomTabBar = () => {
                 className="relative -top-8 flex flex-col items-center cursor-pointer active:scale-95 transition"
               >
                 <div className="w-16 h-16 bg-snap-yellow rounded-3xl flex items-center justify-center shadow-2xl shadow-snap-yellow/50">
-                  <tab.icon size={32} className="text-black" />
+                  <tab.icon size={32} className="text-white" />
                 </div>
               </div>
             );

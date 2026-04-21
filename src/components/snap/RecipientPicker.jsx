@@ -50,7 +50,7 @@ const RecipientPicker = memo(({ friends, selected, onConfirm }) => {
                   <p className="text-sm text-snap-white50">@{friend.username || 'user'}</p>
                 </div>
                 <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'bg-snap-yellow border-snap-yellow' : 'border-white/40'}`}>
-                  {isSelected && <span className="text-black text-xl">✓</span>}
+                  {isSelected && <span className="text-white text-xl">✓</span>}
                 </div>
               </div>
             );

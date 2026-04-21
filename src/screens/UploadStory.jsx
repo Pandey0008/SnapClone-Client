@@ -65,7 +65,7 @@ const UploadStory = () => {
         placeholder="Write caption..."
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
-        className="px-4 py-2 rounded-lg text-black"
+        className="px-4 py-2 rounded-lg text-white"
       />
 
       <button

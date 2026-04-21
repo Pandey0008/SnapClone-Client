@@ -3,22 +3,22 @@ import { createSlice } from '@reduxjs/toolkit';
 const snapSlice = createSlice({
   name: 'snap',
   initialState: {
-    feed: [],
-    sentSnaps: [],
-    viewingSnapId: null,
+    inbox: [], // [{ snapId, senderId, senderName, senderAvatar, mediaType, caption }]
   },
   reducers: {
-    setFeed: (state, action) => {
-      state.feed = action.payload;
+    addIncomingSnap: (state, action) => {
+      // Avoid duplicates
+      const exists = state.inbox.find(s => s.snapId === action.payload.snapId);
+      if (!exists) state.inbox.push(action.payload);
     },
-    addSentSnap: (state, action) => {
-      state.sentSnaps.unshift(action.payload);
+    removeSnap: (state, action) => {
+      state.inbox = state.inbox.filter(s => s.snapId !== action.payload);
     },
-    setViewingSnap: (state, action) => {
-      state.viewingSnapId = action.payload;
+    setSnapInbox: (state, action) => {
+      state.inbox = action.payload;
     },
   },
 });
 
-export const { setFeed, addSentSnap, setViewingSnap } = snapSlice.actions;
+export const { addIncomingSnap, removeSnap, setSnapInbox } = snapSlice.actions;
 export default snapSlice.reducer;

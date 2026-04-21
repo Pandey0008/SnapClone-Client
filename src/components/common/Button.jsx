@@ -10,7 +10,7 @@ const Button = memo(({
   const baseClasses = "px-8 py-3.5 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed";
 
   const variantClasses = {
-    primary: "bg-snap-yellow text-black hover:brightness-110",
+    primary: "bg-snap-yellow text-white hover:brightness-110",
     secondary: "bg-snap-darkMid border border-white/30 text-white hover:bg-white/10",
     ghost: "text-white hover:bg-white/10",
   };

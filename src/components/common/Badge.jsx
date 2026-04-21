@@ -7,7 +7,7 @@ const Badge = memo(({ count, color = "snap-yellow" }) => {
 
   return (
     <div
-      className={`absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold text-black border border-snap-dark`}
+      className={`absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold text-white border border-snap-dark`}
       style={{ backgroundColor: color === "snap-yellow" ? "#FFFC00" : color }}
     >
       {displayCount}

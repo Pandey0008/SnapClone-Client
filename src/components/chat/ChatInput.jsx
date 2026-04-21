@@ -83,7 +83,7 @@ const ChatInput = ({ onSend, onAttach, disabled = false, roomId }) => {
       <button
         onClick={handleSend}
         disabled={!text.trim() || disabled || uploading}
-        className="p-3 bg-snap-yellow text-black rounded-full disabled:opacity-40 transition"
+        className="p-3 bg-snap-yellow text-white rounded-full disabled:opacity-40 transition"
       >
         <Send size={24} />
       </button>
