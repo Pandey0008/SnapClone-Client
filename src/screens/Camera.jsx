@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { setFilter, setRecording } from '../redux/slices/uiSlice';
 import CameraView from '../components/camera/CameraView';
@@ -12,24 +12,37 @@ const CameraScreen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const location = useLocation();
+const { fromChat, roomId, recipientId } = location.state || {};
+
+
   const { activeFilter, isRecording } = useAppSelector((state) => state.ui);
   const { user } = useAppSelector((state) => state.auth);
 
   const [isVideoMode, setIsVideoMode] = useState(false);
   const [isRecordingVideo, setIsRecordingVideo] = useState(false);
 
-  const capturePhoto = useCallback(() => {
-    const screenshot = webcamRef.current?.getScreenshot();
-    if (screenshot) {
-      navigate('/snap/send', { state: { uri: screenshot, type: 'photo' } });
-    }
-  }, [navigate]);
+ const capturePhoto = useCallback(() => {
+  const screenshot = webcamRef.current?.getScreenshot();
+
+  if (screenshot) {
+    navigate('/snap/send', {
+      state: {
+        uri: screenshot,
+        type: 'photo',
+        fromChat,
+        roomId,
+        recipientId
+      }
+    });
+  }
+}, [navigate, fromChat, roomId, recipientId]);
 
   const handlePointerDown = () => {
     if (isVideoMode) {
       dispatch(setRecording(true));
       setIsRecordingVideo(true);
-      console.log("🎥 Recording started...");
+      // console.log("🎥 Recording started...");
     } else {
       capturePhoto();
     }
@@ -39,7 +52,7 @@ const CameraScreen = () => {
     if (isRecordingVideo) {
       dispatch(setRecording(false));
       setIsRecordingVideo(false);
-      console.log("⏹️ Recording stopped");
+      // console.log("⏹️ Recording stopped");
     }
   };
 
@@ -104,12 +117,6 @@ const CameraScreen = () => {
         duration={10}
         onComplete={() => dispatch(setRecording(false))}
       />
-
-      {/* Bottom Hint */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-snap-white50 flex gap-8">
-        <div>Tap for photo</div>
-        <div>Hold for video</div>
-      </div>
     </div>
   );
 };

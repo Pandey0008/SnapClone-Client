@@ -10,8 +10,7 @@ const SendSnap = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { accessToken } = useAppSelector((state) => state.auth);
-
-  const { uri, type } = location.state || {};
+const { uri, type, fromChat, recipientId, roomId } = location.state || {};
 
   const [caption, setCaption] = useState('');
   const [step, setStep] = useState('preview');
@@ -45,7 +44,9 @@ const SendSnap = () => {
   };
 
   const handleSend = async () => {
-    if (!selectedRecipients.length || sending) return;
+    const recipients = fromChat ? [recipientId] : selectedRecipients;
+
+if (!recipients.length || sending) return;
     setSending(true);
     setError('');
 
@@ -60,7 +61,7 @@ const SendSnap = () => {
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('recipientIds', JSON.stringify(selectedRecipients));
+      formData.append('recipientIds', JSON.stringify(recipients));
       formData.append('caption', caption);
 
       await new Promise((resolve, reject) => {
@@ -78,7 +79,11 @@ const SendSnap = () => {
         xhr.send(formData);
       });
 
-      navigate('/camera', { replace: true });
+      if (fromChat && roomId) {
+  navigate(`/chat/${roomId}`, { replace: true });
+} else {
+  navigate('/camera', { replace: true });
+}
     } catch (err) {
       setError(err.message);
       setSending(false);
@@ -126,11 +131,17 @@ const SendSnap = () => {
         {/* Send button — fixed at bottom, always visible */}
         <div className="flex-shrink-0 bg-snap-darkMid px-6 py-5 border-t border-white/10">
           <button
-            onClick={() => setStep('recipients')}
+            onClick={() => {
+  if (fromChat) {
+    handleSend(); // direct send 🚀
+  } else {
+    setStep('recipients');
+  }
+}}
             className="w-full bg-snap-yellow text-white font-bold text-lg rounded-full py-4 flex items-center justify-center gap-2 active:scale-95 transition"
           >
             <Send size={20} />
-            Send To...
+            Send...
           </button>
         </div>
       </div>

@@ -28,16 +28,19 @@ function AppContent() {
   const { isAuthenticated, hydrated } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
+  const fromChat = location.state?.fromChat;
+
   // Main tab routes where bottom bar should appear
   const mainTabRoutes = ['/camera', '/chat', '/stories', '/discover', '/profile'];
 
   // Hide bottom bar on these screens
   const hideTabBarRoutes = ['/chat/', '/snap/', '/call/'];
 
-  const shouldShowTabBar =
-    isAuthenticated &&
-    mainTabRoutes.some(route => location.pathname === route) &&
-    !hideTabBarRoutes.some(route => location.pathname.startsWith(route));
+ const shouldShowTabBar =
+  isAuthenticated &&
+  !fromChat && // 👈 IMPORTANT LINE
+  mainTabRoutes.some(route => location.pathname === route) &&
+  !hideTabBarRoutes.some(route => location.pathname.startsWith(route));
 
   // Don't render until hydration is complete
   if (!hydrated) {

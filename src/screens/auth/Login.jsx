@@ -109,8 +109,6 @@ const Login = () => {
           {/* Google Button */}
           <GoogleLogin
             onSuccess={async (credentialResponse) => {
-              console.log(`${API_BASE_URL}/api/v1/auth/google`);
-              console.log("GOOGLE TOKEN:", credentialResponse.credential);
               try {
                 const response = await fetch(
                   `${API_BASE_URL}/api/v1/auth/google`,
@@ -126,8 +124,6 @@ const Login = () => {
                 );
 
                 const data = await response.json();
-                console.log("user", data);
-
                 if (response.ok) {
                   dispatch(
                     setCredentials({

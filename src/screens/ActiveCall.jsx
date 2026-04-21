@@ -71,15 +71,12 @@ const ActiveCall = () => {
 
     const initCall = async () => {
       try {
-        console.log('Requesting camera and microphone access...');
         const stream = await rtc.getLocalStream();
-        console.log('Got local stream:', stream);
         setLocalStream(stream);
 
         rtc.initPeerConnection();
 
         rtc.peerConnection.ontrack = (event) => {
-          console.log('Got remote stream');
           setRemoteStream(event.streams[0]);
           setCallState('active');
         };
@@ -91,19 +88,15 @@ const ActiveCall = () => {
         };
 
         if (isCallee) {
-          console.log('Callee: waiting for offer...');
           socket?.on('offer', async ({ sdp }) => {
-            console.log('Callee: received offer, creating answer');
             const answer = await rtc.createAnswer(sdp);
             socket.emit('answer', { to: remotePeerRef.current._id, sdp: answer });
           });
         } else {
-          console.log('Caller: creating offer...');
           const offer = await rtc.createOffer();
           socket?.emit('offer', { to: remotePeerRef.current._id, sdp: offer });
 
           socket?.on('answer', async ({ sdp }) => {
-            console.log('Caller: received answer');
             await rtc.addRemoteAnswer(sdp);
           });
         }
@@ -115,7 +108,6 @@ const ActiveCall = () => {
         // FIX: Use a named handler so it can be removed cleanly, and use ref for handleEndCall
         // to avoid stale closure capturing old state
         socket?.on('call-ended', () => {
-          console.log('Remote peer ended the call');
           handleEndCall.current(false);
         });
 

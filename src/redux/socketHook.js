@@ -48,7 +48,7 @@ export const useSocket = (user) => {
       });
 
       socketInstance.on("typing-indicator", ({ userId, isTyping }) => {
-        console.log("User typing:", userId, isTyping);
+        // console.log("User typing:", userId, isTyping);
       });
 
       socketInstance.on(
@@ -117,7 +117,6 @@ export const getSocket = () => socketInstance;
 export const joinRoom = (roomId) => {
   if (socketInstance) {
     socketInstance.emit("join-room", { roomId });
-    console.log("Joined room:", roomId);
   }
 };
 

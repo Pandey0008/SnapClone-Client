@@ -13,8 +13,6 @@ API.interceptors.request.use((req) => {
 
     const parsed = JSON.parse(authData);
 
-    console.log("ACCESS TOKEN:", parsed.accessToken);
-
     if (parsed.accessToken) {
       req.headers.Authorization = `Bearer ${parsed.accessToken}`;
     }

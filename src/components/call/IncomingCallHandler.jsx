@@ -24,8 +24,6 @@ const IncomingCallHandler = () => {
   };
 
   const handleAccept = () => {
-    console.log('Call accepted');
-
     getSocket()?.emit('call-accept', {
       to: incomingCall.from,
       from: user._id
@@ -37,7 +35,6 @@ const IncomingCallHandler = () => {
   };
 
   const handleDecline = () => {
-    console.log('Call declined');
     getSocket()?.emit('call-reject', {
       to: incomingCall.from,
       from: user._id

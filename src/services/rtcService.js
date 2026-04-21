@@ -68,7 +68,7 @@ class RTCConnection {
     };
 
     this.peerConnection.onconnectionstatechange = () => {
-      console.log('Connection state:', this.peerConnection.connectionState);
+      // console.log('Connection state:', this.peerConnection.connectionState);
     };
   }
 
