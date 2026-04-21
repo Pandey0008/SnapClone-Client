@@ -5,6 +5,7 @@ import chatReducer from './slices/chatSlice';
 import callReducer from './slices/callSlice';
 import snapReducer from './slices/snapSlice';
 import onlineReducer from './slices/onlineSlice';
+import storyReducer from "./slices/storySlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     call: callReducer,
     snap: snapReducer,
     online: onlineReducer,
+    stories: storyReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
