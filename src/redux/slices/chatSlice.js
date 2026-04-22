@@ -1,27 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState: {
     conversations: [],
-    messages: {},       // roomId → array of messages
-    typingUsers: {},    // roomId → userIds[]
+    messages: {}, // roomId → array of messages
+    typingUsers: {}, // roomId → userIds[]
     unreadCount: 0,
   },
   reducers: {
     setConversations: (state, action) => {
-      state.conversations = action.payload;
+      // ✅ Never let a non-array value into state
+      state.conversations = Array.isArray(action.payload) ? action.payload : [];
     },
-
     appendMessage: (state, action) => {
       const { roomId, message } = action.payload;
       if (!state.messages[roomId]) state.messages[roomId] = [];
 
       const messageToStore = {
         ...message,
-        createdAt: message.createdAt instanceof Date
-          ? message.createdAt.toISOString()
-          : message.createdAt || new Date().toISOString()
+        createdAt:
+          message.createdAt instanceof Date
+            ? message.createdAt.toISOString()
+            : message.createdAt || new Date().toISOString(),
       };
       state.messages[roomId].push(messageToStore);
     },
@@ -34,7 +35,9 @@ const chatSlice = createSlice({
           state.typingUsers[roomId].push(userId);
         }
       } else {
-        state.typingUsers[roomId] = state.typingUsers[roomId].filter(id => id !== userId);
+        state.typingUsers[roomId] = state.typingUsers[roomId].filter(
+          (id) => id !== userId,
+        );
       }
     },
 
@@ -48,10 +51,10 @@ const chatSlice = createSlice({
     markSnapViewed: (state, action) => {
       const { snapId } = action.payload;
       for (const roomId in state.messages) {
-        state.messages[roomId] = state.messages[roomId].map(msg =>
+        state.messages[roomId] = state.messages[roomId].map((msg) =>
           msg.snapId?.toString() === snapId?.toString()
             ? { ...msg, snapViewed: true }
-            : msg
+            : msg,
         );
       }
     },
@@ -66,7 +69,7 @@ export const {
   setTyping,
   setMessagesByRoom,
   markSnapViewed,
-  markAsRead
+  markAsRead,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

@@ -5,26 +5,21 @@ import {
   getArchivedStoriesAPI,
 } from "./../../services/storyService";
 
+// In your thunk, extract the actual array from the response
+export const fetchStoriesFeed = createAsyncThunk("stories/feed", async () => {
+  const res = await getStoriesFeedAPI();
+console.log("storiesFeed API response:", res.data); // ← Check this in DevTools
+  // ✅ Extract the array — adjust the key to match your actual API response shape
+  return res.data?.stories ?? res.data ?? [];
+});
 
-// FETCH ACTIVE STORIES
-export const fetchStoriesFeed = createAsyncThunk(
-  "stories/feed",
-  async () => {
-    const res = await getStoriesFeedAPI();
-    return res.data;
-  }
-);
-
-
-// FETCH ARCHIVED STORIES
 export const fetchArchivedStories = createAsyncThunk(
   "stories/archive",
   async () => {
     const res = await getArchivedStoriesAPI();
-    return res.data;
-  }
+    return res.data?.stories ?? res.data ?? [];
+  },
 );
-
 
 const storySlice = createSlice({
   name: "stories",
@@ -38,7 +33,6 @@ const storySlice = createSlice({
   reducers: {},
 
   extraReducers: (builder) => {
-
     builder
 
       .addCase(fetchStoriesFeed.pending, (state) => {
@@ -47,15 +41,15 @@ const storySlice = createSlice({
 
       .addCase(fetchStoriesFeed.fulfilled, (state, action) => {
         state.loading = false;
-        state.storiesFeed = action.payload;
+        // ✅ Ensure it's always an array
+        state.storiesFeed = Array.isArray(action.payload) ? action.payload : [];
       })
-
       .addCase(fetchArchivedStories.fulfilled, (state, action) => {
-        state.archivedStories = action.payload;
+        state.archivedStories = Array.isArray(action.payload)
+          ? action.payload
+          : [];
       });
-
   },
 });
-
 
 export default storySlice.reducer;
