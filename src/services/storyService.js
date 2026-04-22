@@ -1,7 +1,8 @@
 import axios from "axios";
+import API_BASE_URL from '../config/api'
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/api/v1/stories",
+  baseURL: `$${API_BASE_URL}/api/v1/stories`,
 });
 
 
