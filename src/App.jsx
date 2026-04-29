@@ -19,6 +19,7 @@ import SendSnap from './screens/SendSnap';
 import SnapViewer from './screens/SnapViewer';
 import ActiveCall from './screens/ActiveCall';
 import UploadStory from "./screens/UploadStory";
+import Map from "./screens/Map";
 
 // Components
 import BottomTabBar from './components/common/BottomTabBar';
@@ -73,6 +74,7 @@ function AppContent() {
             <Route path="/call/active" element={<ActiveCall />} />
 
             <Route path="/upload-story" element={<UploadStory />} />
+            <Route path="/map" element={<Map />} />
 
             <Route path="/" element={<Navigate to="/camera" replace />} />
           </>
