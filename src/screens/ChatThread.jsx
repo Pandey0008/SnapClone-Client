@@ -6,6 +6,8 @@ import {
   appendMessage,
   setTyping,
   setMessagesByRoom,
+  fetchReplySuggestions,
+  clearSuggestions,
 } from "../redux/slices/chatSlice";
 import { useSocket, joinRoom, getSocket } from "../redux/socketHook";
 import { startCall } from "../redux/slices/callSlice";
@@ -14,6 +16,7 @@ import TypingIndicator from "../components/chat/TypingIndicator";
 import ChatInput from "../components/chat/ChatInput";
 import Avatar from "../components/common/Avatar";
 import { Phone, Video } from "lucide-react";
+
 
 const ChatThread = () => {
   const { roomId } = useParams();
@@ -67,6 +70,28 @@ const ChatThread = () => {
       socket.off("call-rejected", onCallRejected);
     };
   }, [navigate]);
+
+  useEffect(() => {
+  if (!currentMessages.length) return;
+  const latest = currentMessages[currentMessages.length - 1];
+  const isFromPeer =
+    latest?.senderId === peer?._id ||
+    latest?.senderId?._id === peer?._id;
+
+  if (isFromPeer && latest?.text) {
+    const context = currentMessages
+      .slice(-6)
+      .map((m) => m.text)
+      .filter(Boolean);
+
+    dispatch(fetchReplySuggestions({ message: latest.text, context, accessToken }));
+  }
+}, [currentMessages.length]); // only re-run when message count changes
+
+// ADD cleanup on unmount / room change
+useEffect(() => {
+  return () => dispatch(clearSuggestions());
+}, [roomId]);
 
   const initiateVideoCall = () => {
     if (!peer) return;

@@ -1,20 +1,25 @@
 import { useState, useRef } from 'react';
 import { Camera, Send, Paperclip } from 'lucide-react';
 import { uploadFile } from '../../services/uploadService';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { clearSuggestions } from '../../redux/slices/chatSlice';
 
 const ChatInput = ({ onSend, onAttach, disabled = false, roomId }) => {
   const [text, setText] = useState('');
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const { accessToken } = useAppSelector((state) => state.auth);
+ const { suggestions, suggestionsLoading } = useAppSelector((state) => state.chat);
+ const dispatch = useAppDispatch();
 
-  const handleSend = () => {
-    if (text.trim() && !disabled) {
-      onSend(text.trim(), null);
+  const handleSend = (msgText) => {
+    const toSend = (msgText || text).trim();
+    if (toSend && !disabled) {
+      onSend(toSend, null);
       setText('');
+      dispatch(clearSuggestions());
     }
-  };
+  }
 
   const handleFileSelect = async (e) => {
     const file = e.target.files?.[0];
@@ -39,8 +44,36 @@ const ChatInput = ({ onSend, onAttach, disabled = false, roomId }) => {
   };
 
   return (
-    <div className="bg-snap-darkMid border-t border-white/10 px-4 py-3 flex items-center gap-3">
-      {/* File Upload */}
+ <div className="bg-snap-darkMid border-t border-white/10 px-4 py-3 flex flex-col gap-2">
+
+      {/* ADD: Suggestion chips row */}
+      {(suggestionsLoading || suggestions.length > 0) && (
+        <div className="flex gap-2 flex-wrap">
+          {suggestionsLoading ? (
+            // Skeleton chips
+            [72, 96, 80].map((w, i) => (
+              <div key={i} style={{ width: w }}
+                className="h-8 rounded-full bg-white/10 animate-pulse" />
+            ))
+          ) : (
+            suggestions.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => handleSend(s)}
+                className="px-3 py-1.5 rounded-full text-sm text-white/80 hover:text-white
+                           bg-white/10 hover:bg-snap-yellow/20 border border-white/20
+                           hover:border-snap-yellow/50 transition-all duration-200 whitespace-nowrap"
+              >
+                {s}
+              </button>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Existing input row — unchanged */}
+      <div className="flex items-center gap-3">
+             {/* File Upload */}
       <input
         ref={fileInputRef}
         type="file"
@@ -87,6 +120,7 @@ const ChatInput = ({ onSend, onAttach, disabled = false, roomId }) => {
       >
         <Send size={24} />
       </button>
+      </div>
     </div>
   );
 };
